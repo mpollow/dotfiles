@@ -37,8 +37,11 @@ floating_modifier $mod
 bindsym $mod+Return exec i3-sensible-terminal
 
 # start browser
-#
 bindsym $mod+Shift+Return exec qutebrowser
+bindsym $mod+Shift+Tab exec chromium
+
+# start ipython in terminal
+bindsym $mod+Shift+p exec i3-sensible-terminal -e ipython
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -51,14 +54,14 @@ bindsym $mod+d exec dmenu_run
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-#bindsym $mod+h focus left
-#bindsym $mod+j focus down
-#bindsym $mod+k focus up
-#bindsym $mod+l focus right
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+#bindsym $mod+j focus left
+#bindsym $mod+k focus down
+#bindsym $mod+l focus up
+#bindsym $mod+semicolon focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -67,10 +70,14 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+#bindsym $mod+Shift+j move left
+#bindsym $mod+Shift+k move down
+#bindsym $mod+Shift+l move up
+#bindsym $mod+Shift+semicolon move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -79,7 +86,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+Shift+v split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -96,10 +103,12 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+#bindsym $mod+space focus mode_toggle
+bindsym $mod+Ctrl+space focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
+bindsym $mod+Shift+a focus child
 
 # focus the child container
 #bindsym $mod+d focus child
@@ -181,22 +190,85 @@ bar {
         status_command i3status
 }
 
-## user config:
-#for_window [class="^.*"] border pixel 0
-gaps inner 5
-gaps outer 2
-smart_gaps on
+#for_window [class="^.*"] border pixel 5
+#gaps inner 10
+#gaps outer 3
+
+#smart_gaps on
+smart_borders on
+
+#gaps inner 5
+#gaps outer 2
+#smart_gaps on
 #smart_borders on
-#default_boarder none
+
+#title_align center
+
+default_border pixel 4
+default_floating_border normal
 
 focus_follows_mouse no
+
+#assign [class="zita-mu1"] 7
+#for_window [class="zita-mu1"] border pixel 10  # not working
+#for_window [class="qutebrowser"] border pixel 5
+#for_window [class="Chromium"] border pixel 5
+#for_window [class="Zathura"] border pixel 5
+#for_window [class="Spotify"] border pixel 5
+#for_window [class="^.*xvt"] border pixel 5
+for_window [class="zita-mu1"] move container to workspace 10
+for_window [class="QjackCtl"] floating enable, border normal, move container to workspace 10
+#for_window [class="matplotlib"] floating enable 
+#for_window [class="vlc"] sticky enable
+
+#for_window [class="zita-mu1"] floating enable , move container to workspace 10
+
+#Colors
+#                                     (not working...:)
+#client.background       #000000
+#client.focused          #4c7899 #285577 #ffffff #2e9ef4
+#client.focused_inactive #333333 #5f676a #ffffff #484e50
+#client.unfocused        #333333 #222222 #888888 #292d2e
+#client.urgent           #2f343a #900000 #ffffff #900000
 
 #exec "/usr/bin/jackd -dalsa -dhw:1,0 -r48000 -p1024 -n2"
 #exec qjackctl
 #exec --no-startup-id urxvt
 
+#exec xss-lock -- i3lock -n -c 880000 -f &
+
+# rofi menu
+bindsym $mod+space exec "rofi --no-startup-id -show combi"
+
+# screen lock
+bindsym $mod+Ctrl+Delete exec loginctl lock-session
+
+# screenshot
+bindsym Print exec "gnome-screenshot -i"
+
+# switch keyboard us/intl
+bindsym Scroll_Lock exec "setxkbmap us"
+bindsym Shift+Scroll_Lock exec "setxkbmap us -variant intl"
+
+# Brightness internal display
 bindsym XF86MonBrightnessUp exec ~/bin/brightness_up_int.py
 bindsym XF86MonBrightnessDown exec ~/bin/brightness_down_int.py
 
-bindsym Shift+XF86MonBrightnessUp exec acdcontrol /dev/usb/hiddev0 brightness +25
-bindsym Shift+XF86MonBrightnessDown exec acdcontrol /dev/usb/hiddev0 brightness -- -25
+# Brightness Apple Cinema Display
+bindsym Shift+XF86MonBrightnessUp exec acdcontrol.py /dev/usb/hiddev0 +16
+bindsym Shift+XF86MonBrightnessDown exec acdcontrol.py /dev/usb/hiddev0 -- -16
+
+# Pulseaudio volume
+bindsym XF86AudioMute exec "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+bindsym XF86AudioLowerVolume exec "pactl set-sink-mute @DEFAULT_SINK@ false && pactl set-sink-volume @DEFAULT_SINK@ -10%"
+bindsym XF86AudioRaiseVolume exec "pactl set-sink-mute @DEFAULT_SINK@ false && pactl set-sink-volume @DEFAULT_SINK@ +10%"
+
+# Switch display mode
+bindsym $mod+Shift+Ctrl+1 exec "./bin/display_intern.sh && ./bin/keyboard_latitude.sh"
+bindsym $mod+Shift+Ctrl+2 exec ./bin/display_dual.sh
+bindsym $mod+Shift+Ctrl+3 exec "./bin/display_extern.sh && ./bin/keyboard_apple.sh"
+
+# Activate jack audio
+bindsym $mod+Shift+Ctrl+0 exec ./bin/audio_start_intern.sh
+bindsym $mod+Shift+Ctrl+9 exec ./bin/audio_start_extern.sh
+bindsym $mod+Shift+Ctrl+8 exec "pkill -9 jackd"

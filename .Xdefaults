@@ -15,19 +15,21 @@ URxvt.tabbed.tab-fg: 0
 URxvt.tabbed.tab-bg: 1
 URxvt.tabbed.secondaryScroll: true
 URxvt.tabbed.font: xft:Bitstream Vera Sans Mono:pixelsize=12
-URxvt*inheritPixmap: true 
+URxvt*inheritPixmap: true
 URxvt*shading: 70
 # transparency
-#URxvt.inheritPixmap: true
-#URxvt.tintColor: red
-#URxvt.shading: 40
+URxvt.inheritPixmap: true
+URxvt.tintColor: red
+URxvt.shading: 40
 
+URxvt.iso14755: false
+URxvt.iso14755_52: false
 
 ! terminal colors ------------------------------------------------------------
 
 ! tangoesque scheme
-*background: #111111
-*foreground: #babdb6
+!*background: #111111
+!*foreground: #babdb6
 ! Black (not tango) + DarkGrey
 *color0:  #000000
 *color8:  #555753
