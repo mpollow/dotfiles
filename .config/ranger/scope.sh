@@ -95,14 +95,22 @@ handle_extension() {
 
         # numpy arrays
         npy)
-            file --dereference --brief -- "${FILE_PATH}" && echo && python -c "import numpy as np; print(np.load('${FILE_PATH}').__repr__())" && exit 5
+        file --dereference --brief -- "${FILE_PATH}" && echo && python ${HOME}/bin/ranger_npy.py ${FILE_PATH} && exit 5
             ;; # Continue with next handler on failure
        
         # HDF5 files
         h5)
             file --dereference --brief -- "${FILE_PATH}" && echo && h5ls -f ${FILE_PATH} && exit 5
             ;; # Continue with next handler on failure
-
+        
+        # WAV files
+        wav)
+            #file --dereference --brief -- "${FILE_PATH}" && echo && soxi ${FILE_PATH} && exit 5
+            python ${HOME}/bin/ranger_wav.py ${FILE_PATH} ${IMAGE_CACHE_PATH} && exit 6
+            ;; # Continue with next handler on failure
+        
+        csv)
+            exit 2;;
 #        # gmsh meshes
 #        msh)
 #            gmsh ${FILEPATH} && exit 5

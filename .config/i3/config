@@ -165,10 +165,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym h resize shrink width 10 px or 10 ppt
+        bindsym j resize grow height 10 px or 10 ppt
+        bindsym k resize shrink height 10 px or 10 ppt
+        bindsym l resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -187,88 +187,106 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
+        #position top
         status_command i3status
 }
 
-#for_window [class="^.*"] border pixel 5
+# Polybar with example configuration
+#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
 #gaps inner 10
 #gaps outer 3
-
-#smart_gaps on
-smart_borders on
-
-#gaps inner 5
-#gaps outer 2
 #smart_gaps on
 #smart_borders on
-
 #title_align center
 
-default_border pixel 4
+default_border pixel 2
 default_floating_border normal
 
 focus_follows_mouse no
 
-#assign [class="zita-mu1"] 7
-#for_window [class="zita-mu1"] border pixel 10  # not working
-#for_window [class="qutebrowser"] border pixel 5
-#for_window [class="Chromium"] border pixel 5
-#for_window [class="Zathura"] border pixel 5
-#for_window [class="Spotify"] border pixel 5
-#for_window [class="^.*xvt"] border pixel 5
-for_window [class="zita-mu1"] move container to workspace 10
-for_window [class="QjackCtl"] floating enable, border normal, move container to workspace 10
-#for_window [class="matplotlib"] floating enable 
-#for_window [class="vlc"] sticky enable
+## configuration of specific applications
+for_window [instance="zita-mu1"] move container to scratchpad
+for_window [instance="qjackctl"] floating enable, move container to scratchpad
+for_window [instance="htop"] move container to scratchpad
+for_window [instance="electrum"] border normal
 
-#for_window [class="zita-mu1"] floating enable , move container to workspace 10
+## HOTKEYS
+# scatchpad views
+bindsym $mod+equal [instance="emacs"] scratchpad show
+bindsym $mod+question [instance="emacs"] scratchpad show
+bindsym $mod+minus [instance="htop"] scratchpad show
+bindsym $mod+backslash [instance="zita-mu1"] scratchpad show
+bindsym $mod+bracketright [instance="qjackctl"] scratchpad show
+#bindsym $mod+bracketleft [instance="spotify"] scratchpad show
 
-#Colors
-#                                     (not working...:)
-#client.background       #000000
-#client.focused          #4c7899 #285577 #ffffff #2e9ef4
-#client.focused_inactive #333333 #5f676a #ffffff #484e50
-#client.unfocused        #333333 #222222 #888888 #292d2e
-#client.urgent           #2f343a #900000 #ffffff #900000
+# emacs notebook
+for_window [instance="emacs_notebook"] move container to scratchpad
+bindsym $mod+colon [instance="emacs_notebook"] scratchpad show
+bindsym $mod+Shift+colon exec --no-startup-id emacs -name emacs_notebook ./org/notebook.org
 
-#exec "/usr/bin/jackd -dalsa -dhw:1,0 -r48000 -p1024 -n2"
-#exec qjackctl
-#exec --no-startup-id urxvt
+# emacs tasks
+for_window [instance="emacs_tasks"] move container to scratchpad
+bindsym $mod+apostrophe [instance="emacs_tasks"] scratchpad show
+bindsym $mod+Shift+apostrophe exec --no-startup-id emacs -name emacs_tasks ./org/tasks.org
 
-#exec xss-lock -- i3lock -n -c 880000 -f &
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+BackSpace move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+BackSpace scratchpad show
 
 # rofi menu
 bindsym $mod+space exec "rofi --no-startup-id -show combi"
+#bindsym $mod+space exec "rofi --no-startup-id -show calc -modi calc --no-show-match -no-sort"
+# rofi-calc crashes on run
 
 # screen lock
 bindsym $mod+Ctrl+Delete exec loginctl lock-session
+bindsym $mod+XF86Eject exec loginctl lock-session
+bindsym $mod+Mod1+XF86Eject exec systemctl suspend
 
 # screenshot
-bindsym Print exec "gnome-screenshot -i"
+#bindsym Print exec "gnome-screenshot -i"
+bindsym XF86Tools exec "gnome-screenshot -i"
+#bindsym XF86Launch6 exec "gnome-screenshot -i"
 
 # switch keyboard us/intl
-bindsym Scroll_Lock exec "setxkbmap us"
-bindsym Shift+Scroll_Lock exec "setxkbmap us -variant intl"
+#bindsym Scroll_Lock exec "setxkbmap us"
+#bindsym Shift+Scroll_Lock exec "setxkbmap us -variant intl"
+bindsym XF86Launch5 exec "setxkbmap us"
+bindsym Shift+XF86Launch5 exec "setxkbmap us -variant intl"
 
-# Brightness internal display
-bindsym XF86MonBrightnessUp exec ~/bin/brightness_up_int.py
-bindsym XF86MonBrightnessDown exec ~/bin/brightness_down_int.py
-
-# Brightness Apple Cinema Display
-bindsym Shift+XF86MonBrightnessUp exec acdcontrol.py /dev/usb/hiddev0 +16
-bindsym Shift+XF86MonBrightnessDown exec acdcontrol.py /dev/usb/hiddev0 -- -16
+# Brightness primary and secondary display
+bindsym XF86MonBrightnessUp exec ~/bin/brightness_up
+bindsym XF86MonBrightnessDown exec ~/bin/brightness_down
+bindsym Ctrl+XF86MonBrightnessUp exec ~/bin/brightness_up_2nd
+bindsym Ctrl+XF86MonBrightnessDown exec ~/bin/brightness_down_2nd
 
 # Pulseaudio volume
 bindsym XF86AudioMute exec "pactl set-sink-mute @DEFAULT_SINK@ toggle"
 bindsym XF86AudioLowerVolume exec "pactl set-sink-mute @DEFAULT_SINK@ false && pactl set-sink-volume @DEFAULT_SINK@ -10%"
 bindsym XF86AudioRaiseVolume exec "pactl set-sink-mute @DEFAULT_SINK@ false && pactl set-sink-volume @DEFAULT_SINK@ +10%"
 
+# Spotify hotkeys
+bindsym XF86AudioPlay exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
+bindsym XF86AudioNext exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
+bindsym XF86AudioPrev exec "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"
+
 # Switch display mode
-bindsym $mod+Shift+Ctrl+1 exec "./bin/display_intern.sh && ./bin/keyboard_latitude.sh"
-bindsym $mod+Shift+Ctrl+2 exec ./bin/display_dual.sh
-bindsym $mod+Shift+Ctrl+3 exec "./bin/display_extern.sh && ./bin/keyboard_apple.sh"
+bindsym $mod+Ctrl+1 exec ./bin/switch_standalone.sh
+bindsym $mod+Ctrl+2 exec ./bin/display_dual.sh
+bindsym $mod+Ctrl+3 exec ./bin/switch_docked.sh
 
 # Activate jack audio
-bindsym $mod+Shift+Ctrl+0 exec ./bin/audio_start_intern.sh
-bindsym $mod+Shift+Ctrl+9 exec ./bin/audio_start_extern.sh
-bindsym $mod+Shift+Ctrl+8 exec "pkill -9 jackd"
+#bindsym $mod+Shift+bracketleft exec ./bin/audio_start_intern.sh
+#bindsym $mod+Shift+bracketright exec ./bin/audio_start_extern.sh
+#bindsym $mod+Shift+backslash exec "pkill -9 jackd || pkill -9 qjackctl || pkill -9 zita-mu1"
+#bindsym $mod+Shift+Ctrl+0 exec ./bin/audio_start_intern.sh
+#bindsym $mod+Shift+Ctrl+9 exec ./bin/audio_start_extern.sh
+#bindsym $mod+Shift+Ctrl+8 exec "pkill -9 jackd || pkill -9 qjackctl || pkill -9 zita-mu1"
+
+exec --no-startup-id i3-sensible-terminal -name htop -e htop
+#exec --no-startup-id chromium --app=https://mail.google.com --new-window
+#exec --no-startup-id chromium --app=https://maps.google.com --new-window
+#exec --no-startup-id chromium --app=https://calender.google.com --new-window
