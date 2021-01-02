@@ -1,12 +1,14 @@
-URxvt.saveLines: 1000
 URxvt.scrollBar: false
 URxvt.foreground: white
 URxvt.background: black
 URxvt.secondaryScroll: true
-URxvt.font: xft:Bitstream Vera Sans Mono:pixelsize=14
+!URxvt.font: xft:Bitstream Vera Sans Mono:pixelsize=14
+#URxvt.perl-lib: /usr/lib/urxvt/perl/
 URxvt.perl-ext-common: default,matcher
-URxvt.urlLauncher: qutebrowser
+#URxvt.perl-ext: default,matcher
+URxvt.url-launcher: qutebrowser
 URxvt.matcher.button: 1
+#URxvt.matcher.pattern.1: \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
 URxvt.tabbed.saveLines: 1000
 URxvt.tabbed.scrollBar: false
 URxvt.tabbed.tabbar-fg: 3
@@ -25,11 +27,27 @@ URxvt.shading: 40
 URxvt.iso14755: false
 URxvt.iso14755_52: false
 
+! extra settings
+
+!*font: xft:Inconsolata:size=12
+urxvt*font: xft:Inconsolata:size=12
+xterm*font: xft:Inconsolata:size=12
+
+! Xft settings ---------------------------------------------------------------
+
+!*dpi:           64
+!Xft.dpi:        96
+!Xft.dpi:        144
+Xft.antialias:  true
+Xft.rgba:       rgb
+Xft.hinting:    true
+Xft.hintstyle:  hintslight
+
 ! terminal colors ------------------------------------------------------------
 
 ! tangoesque scheme
-!*background: #111111
-!*foreground: #babdb6
+*background: #111111
+*foreground: #babdb6
 ! Black (not tango) + DarkGrey
 *color0:  #000000
 *color8:  #555753
